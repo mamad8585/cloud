@@ -17,7 +17,7 @@ local jdat = json:decode(url)
 
 if matches[1] == 'setwlc' and is_owner(msg) then
 redis:hset(hash,'welcome',matches[2])
-        return '❗️"..matches[2].." Set New #Welcome❗️'
+        return '❗️'..matches[2]..' Set New #Welcome❗️'
 end
 
 if matches[1] == 'chat_add_user' or 'chat_add_user_link' or 'channel_invite' and msg.service then
