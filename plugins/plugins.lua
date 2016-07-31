@@ -25,24 +25,24 @@ local function list_all_plugins(only_enabled)
   local text = ''
   local nsum = 0
   for k, v in pairs( plugins_names( )) do
-    --  ✅ enabled, ⛔️ disabled
-    local status = '⛔️'
+    --  ☑️ enabled, 🔘 disabled
+    local status = '🔘'
     nsum = nsum+1
     nact = 0
     -- Check if is enabled
     for k2, v2 in pairs(_config.enabled_plugins) do
       if v == v2..'.lua' then 
-        status = '✅' 
+        status = '☑️' 
       end
       nact = nact+1
     end
-    if not only_enabled or status == '✅' then
+    if not only_enabled or status == '☑️' then
       -- get the name
       v = string.match (v, "(.*)%.lua")
       text = text..nsum..'. '..v..'  '..status..'\n'
     end
   end
-  local text = text..'\nThere are '..nsum..' plugins installed.\n'..nact..' plugins enabled and '..nsum-nact..' disabled'
+  local text = text..'\nThere are '..nsum..' plugins #installed.\n'..nact..' plugins #enabled and '..nsum-nact..' #disabled'
   return text
 end
 
@@ -50,14 +50,14 @@ local function list_plugins(only_enabled)
   local text = ''
   local nsum = 0
   for k, v in pairs( plugins_names( )) do
-    --  ✅ enabled, ⛔️ disabled
-    local status = '⛔️'
+    --  ☑️ enabled, 🔘 disabled
+    local status = '🔘'
     nsum = nsum+1
     nact = 0
     -- Check if is enabled
     for k2, v2 in pairs(_config.enabled_plugins) do
       if v == v2..'.lua' then 
-        status = '✅' 
+        status = '☑️' 
       end
       nact = nact+1
     end
@@ -67,7 +67,7 @@ local function list_plugins(only_enabled)
       text = text..v..'  '..status..'\n'
     end
   end
-  local text = text..'\n'..nact..' plugins enabled from '..nsum..' plugins installed.'
+  local text = text..'\n'..nact..' plugins #enabled from '..nsum..' plugins #installed.'
   return text
 end
 
@@ -82,7 +82,7 @@ local function enable_plugin( plugin_name )
   print('checking if '..plugin_name..' exists')
   -- Check if plugin is enabled
   if plugin_enabled(plugin_name) then
-    return 'Plugin '..plugin_name..' is enabled'
+    return 'Plugin '..plugin_name..' is #enabled'
   end
   -- Checks if plugin exists
   if plugin_exists(plugin_name) then
@@ -93,19 +93,19 @@ local function enable_plugin( plugin_name )
     -- Reload the plugins
     return reload_plugins( )
   else
-    return 'Plugin '..plugin_name..' does not exists'
+    return 'Plugin '..plugin_name..' does not #exists'
   end
 end
 
 local function disable_plugin( name, chat )
   -- Check if plugins exists
   if not plugin_exists(name) then
-    return 'Plugin '..name..' does not exists'
+    return 'Plugin '..name..' does not #exists'
   end
   local k = plugin_enabled(name)
   -- Check if plugin is enabled
   if not k then
-    return 'Plugin '..name..' not enabled'
+    return 'Plugin '..name..' not #enabled'
   end
   -- Disable and reload
   table.remove(_config.enabled_plugins, k)
@@ -115,7 +115,7 @@ end
 
 local function disable_plugin_on_chat(receiver, plugin)
   if not plugin_exists(plugin) then
-    return "Plugin doesn't exists"
+    return "Plugin doesn't #exists"
   end
 
   if not _config.disabled_plugin_on_chat then
@@ -129,25 +129,25 @@ local function disable_plugin_on_chat(receiver, plugin)
   _config.disabled_plugin_on_chat[receiver][plugin] = true
 
   save_config()
-  return 'Plugin '..plugin..' disabled on this chat'
+  return 'Plugin '..plugin..' #disabled on this #chat'
 end
 
 local function reenable_plugin_on_chat(receiver, plugin)
   if not _config.disabled_plugin_on_chat then
-    return 'There aren\'t any disabled plugins'
+    return 'There aren\'t any #disabled plugins'
   end
 
   if not _config.disabled_plugin_on_chat[receiver] then
-    return 'There aren\'t any disabled plugins for this chat'
+    return 'There aren\'t any #disabled plugins for this #chat'
   end
 
   if not _config.disabled_plugin_on_chat[receiver][plugin] then
-    return 'This plugin is not disabled'
+    return 'This plugin is not #disabled'
   end
 
   _config.disabled_plugin_on_chat[receiver][plugin] = false
   save_config()
-  return 'Plugin '..plugin..' is enabled again'
+  return 'Plugin '..plugin..' is #enabled again'
 end
 
 local function run(msg, matches)
@@ -182,7 +182,7 @@ local function run(msg, matches)
   -- Disable a plugin
   if matches[1] == '-' and is_sudo(msg) then --after changed to moderator mode, set only sudo
     if matches[2] == 'plugins' then
-    	return 'This plugin can\'t be disabled'
+    	return 'This plugin can\'t be #disabled'
     end
     print("disable: "..matches[2])
     return disable_plugin(matches[2])
